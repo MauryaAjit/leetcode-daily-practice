@@ -1,0 +1,39 @@
+import java.util.*;
+
+public class Item {
+    int val;
+    int wt;
+
+    // Constructor
+    public Item(int val, int wt) {
+        this.val = val;
+        this.wt = wt;
+    }
+
+    public static void main(String[] args) {
+        int cap = 3;
+        Item[] arr = {
+            new Item(60, 6),
+            new Item(40, 3),
+            new Item(90, 8)
+        };
+
+        // Sort items by value per weight in descending order
+        Arrays.sort(arr, (a, b) -> Double.compare((double) b.val / b.wt, (double) a.val / a.wt));
+
+        double tval = 0.0;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (cap >= arr[i].wt) {
+                tval += arr[i].val;
+                cap -= arr[i].wt;
+            } else {
+                // Take fractional part of item
+                tval += ((double) arr[i].val / arr[i].wt) * cap;
+                break;
+            }
+        }
+
+        System.out.println(tval);
+    }
+}
