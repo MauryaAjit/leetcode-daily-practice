@@ -1,0 +1,15 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+      int[]nums={2,9,10,4,1};
+      int target=10;
+      boolean targetfound =false;
+      for(int i=0;i<nums.length; i++){
+        if(nums[i]==target){
+          System.out.println("target element found");
+          break;
+        }
+      }
+  }
+}
