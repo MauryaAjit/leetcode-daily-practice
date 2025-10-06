@@ -1,0 +1,28 @@
+import java.util.*;
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        // Map to store the last index of each character
+        Map<Character, Integer> map = new HashMap<>();
+
+        int left = 0;     // start of window
+        int maxLength = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char ch = s.charAt(right);
+
+            // If character already seen, move left pointer after its last occurrence
+            if (map.containsKey(ch)) {
+                left = Math.max(left, map.get(ch) + 1);
+            }
+
+            // Update the last seen index of this character
+            map.put(ch, right);
+
+            // Calculate current window length
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+
+        return maxLength;
+    }
+}
