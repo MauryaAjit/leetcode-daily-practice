@@ -1,0 +1,47 @@
+class Solution {
+    public int myAtoi(String s) {
+        int i = 0, n = s.length();
+        long result = 0;  // Use long to detect overflow
+        int sign = 1;
+
+        // 1. Ignore leading whitespaces
+        while (i < n && s.charAt(i) == ' ') {
+            i++;
+        }
+
+        // 2. Handle optional sign
+        if (i < n && (s.charAt(i) == '+' || s.charAt(i) == '-')) {
+            if (s.charAt(i) == '-') {
+                sign = -1;
+            }
+            i++;
+        }
+
+        // 3. Read digits and stop at first non-digit
+        while (i < n && Character.isDigit(s.charAt(i))) {
+            result = result * 10 + (s.charAt(i) - '0');
+
+            // 4. Check overflow and clamp to 32-bit integer limits
+            if (sign * result > Integer.MAX_VALUE) {
+                return Integer.MAX_VALUE;
+            } else if (sign * result < Integer.MIN_VALUE) {
+                return Integer.MIN_VALUE;
+            }
+
+            i++;
+        }
+
+        // 5. Return the final result with sign
+        return (int)(sign * result);
+    }
+
+    // For testing
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        System.out.println(sol.myAtoi("42"));          // Output: 42
+        System.out.println(sol.myAtoi("   -042"));     // Output: -42
+        System.out.println(sol.myAtoi("1337c0d3"));    // Output: 1337
+        System.out.println(sol.myAtoi("0-1"));         // Output: 0
+        System.out.println(sol.myAtoi("words and 987"));// Output: 0
+    }
+}
