@@ -1,0 +1,33 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle overflow case
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Determine sign of result
+        boolean negative = (dividend < 0) ^ (divisor < 0);
+
+        // Convert to long to prevent overflow during abs()
+        long ldividend = Math.abs((long) dividend);
+        long ldivisor = Math.abs((long) divisor);
+
+        int result = 0;
+
+        // Subtract divisor multiples from dividend
+        while (ldividend >= ldivisor) {
+            long temp = ldivisor, multiple = 1;
+
+            // Double temp until it's just smaller than dividend
+            while (ldividend >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+
+            ldividend -= temp;
+            result += multiple;
+        }
+
+        return negative ? -result : result;
+    }
+}
