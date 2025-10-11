@@ -1,0 +1,38 @@
+class Solution {
+    public long maximumTotalDamage(int[] power) {
+         Map<Integer, Long> freq = new HashMap<>();
+        for (int p : power) {
+            freq.put(p, freq.getOrDefault(p, 0L) + 1);
+        }
+
+        // Step 2: Sort unique power values
+        List<Integer> keys = new ArrayList<>(freq.keySet());
+        Collections.sort(keys);
+
+        // Step 3: Dynamic Programming
+        long prev2 = 0; // dp[i-2]
+        long prev1 = 0; // dp[i-1]
+        long lastKey = -10; // placeholder for last used key
+
+        for (int key : keys) {
+            long damage = freq.get(key) * key;
+            long curr;
+
+            // If current key is within 2 of previous, conflict => choose max
+            if (key <= lastKey + 2) {
+                curr = Math.max(prev1, prev2 + damage);
+            } else {
+                // No conflict, can safely add damage
+                curr = prev1 + damage;
+            }
+
+            // Shift DP window
+            prev2 = prev1;
+            prev1 = curr;
+            lastKey = key;
+        }
+
+        return prev1;
+        
+    }
+}
