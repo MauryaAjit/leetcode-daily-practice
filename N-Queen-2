@@ -1,0 +1,39 @@
+public class Solution {
+    private int count = 0;
+
+    public int totalNQueens(int n) {
+        // Arrays to track column and diagonal attacks
+        boolean[] cols = new boolean[n];          // column occupied
+        boolean[] diag1 = new boolean[2 * n];     // main diagonal (\)
+        boolean[] diag2 = new boolean[2 * n];     // anti-diagonal (/)
+
+        backtrack(0, n, cols, diag1, diag2);
+        return count;
+    }
+
+    private void backtrack(int row, int n, boolean[] cols, boolean[] diag1, boolean[] diag2) {
+        // Base case: all queens are placed
+        if (row == n) {
+            count++;
+            return;
+        }
+
+        // Try placing queen in each column
+        for (int col = 0; col < n; col++) {
+            int d1 = row - col + n; // offset for main diagonal
+            int d2 = row + col;     // offset for anti-diagonal
+
+            // If position is not under attack
+            if (!cols[col] && !diag1[d1] && !diag2[d2]) {
+                // Place queen
+                cols[col] = diag1[d1] = diag2[d2] = true;
+
+                // Recurse for next row
+                backtrack(row + 1, n, cols, diag1, diag2);
+
+                // Backtrack (remove queen)
+                cols[col] = diag1[d1] = diag2[d2] = false;
+            }
+        }
+    }
+}
