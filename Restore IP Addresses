@@ -1,0 +1,45 @@
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> result = new ArrayList<>();
+        backtrack(s, 0, new ArrayList<>(), result);
+        return result;
+    }
+
+    private void backtrack(String s, int index, List<String> current, List<String> result) {
+        // If we have 4 parts and used all digits, it's a valid IP
+        if (current.size() == 4 && index == s.length()) {
+            result.add(String.join(".", current));
+            return;
+        }
+
+        // If too many parts or no more characters left to process
+        if (current.size() == 4 || index == s.length()) {
+            return;
+        }
+
+        // Try 1, 2, and 3-digit parts
+        for (int len = 1; len <= 3 && index + len <= s.length(); len++) {
+            String segment = s.substring(index, index + len);
+
+            // Skip invalid segments
+            if (!isValid(segment)) continue;
+
+            // Choose
+            current.add(segment);
+
+            // Explore further
+            backtrack(s, index + len, current, result);
+
+            // Backtrack
+            current.remove(current.size() - 1);
+        }
+    }
+
+    // Helper function to validate an IP segment
+    private boolean isValid(String segment) {
+        if (segment.length() > 1 && segment.startsWith("0")) return false; // leading zero
+        int num = Integer.parseInt(segment);
+        return num >= 0 && num <= 255;
+        
+    }
+}
