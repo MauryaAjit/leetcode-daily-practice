@@ -1,0 +1,39 @@
+class Solution {
+    public List<Integer> diffWaysToCompute(String expression) {
+        Map<String, List<Integer>> memo = new HashMap<>();
+        return compute(expression, memo);
+    }
+
+    private List<Integer> compute(String expr, Map<String, List<Integer>> memo) {
+        if (memo.containsKey(expr)) {
+            return memo.get(expr);
+        }
+
+        List<Integer> res = new ArrayList<>();
+
+        for (int i = 0; i < expr.length(); i++) {
+            char c = expr.charAt(i);
+            if (c == '+' || c == '-' || c == '*') {
+                List<Integer> left = compute(expr.substring(0, i), memo);
+                List<Integer> right = compute(expr.substring(i + 1), memo);
+
+                for (int l : left) {
+                    for (int r : right) {
+                        if (c == '+') res.add(l + r);
+                        else if (c == '-') res.add(l - r);
+                        else if (c == '*') res.add(l * r);
+                    }
+                }
+            }
+        }
+
+        // Base case: if the expression contains only a number
+        if (res.isEmpty()) {
+            res.add(Integer.parseInt(expr));
+        }
+
+        memo.put(expr, res);
+        return res;
+
+    }
+}
